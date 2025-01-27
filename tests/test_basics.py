@@ -11,14 +11,12 @@ def test_basic():
     print("Hello World")
 
 
-def test_true_assert():
-    """Test a true assert"""
-    assert True
+def test_one_plus_one():
+    """Test to verify one plus one is two"""
+    if 1 + 1 != 2:
+        raise ValueError("one plus one did not equal two")
 
 
-def test_false_assert():
-    """Test a false assert"""
-    try:
-        assert False
-    except AssertionError:
-        assert True
+def test_assert():
+    """Test a truthful assert"""
+    assert 1 + 1 == 2, "one plus one did not equal two"

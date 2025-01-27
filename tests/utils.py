@@ -17,7 +17,7 @@ def proccess_json_output(text: str):
     return status, output, error
 
 
-def run_and_check(command: str):
+def run_and_check(command: str, expected_status: int = 0, expected_error: str = ""):
     command_list = shlex.split(command)
     result = subprocess.check_output(
         command_list,
@@ -25,5 +25,5 @@ def run_and_check(command: str):
         text=True,
     )
     status, output, error = proccess_json_output(result.strip())
-    assert status == 0 and not error, f"Got error running command {command} - {error}"
+    assert status == expected_status and error == expected_error, f"Got error running command {command} - {error}"
     return output
