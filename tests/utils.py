@@ -12,9 +12,9 @@ import json
 def proccess_json_output(text: str):
     text_dict = json.loads(text)
     status = text_dict["status"]
-    output = text_dict["output"]
+    result = text_dict["result"]
     error = text_dict["error"]
-    return status, output, error
+    return status, result, error
 
 
 def run_and_check(command: str, expected_status: int = 0, expected_error: str = ""):
@@ -24,6 +24,6 @@ def run_and_check(command: str, expected_status: int = 0, expected_error: str = 
         shell=False,
         text=True,
     )
-    status, output, error = proccess_json_output(result.strip())
-    assert status == expected_status and error == expected_error, f"Got error running command {command} - {error}"
-    return output
+    status, result, error = proccess_json_output(result.strip())
+    assert status == expected_status and error == expected_error, f"Got error running command {command}\nStatus:{status}\nError: {error}"
+    return result
