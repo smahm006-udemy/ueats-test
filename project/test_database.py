@@ -5,11 +5,13 @@ tests/test_database.py
 ueats CLI database test
 """
 
+import pytest
 from subprocess import check_output
 from .utils import proccess_json_output, run_and_check
 from pathlib import Path
 
 
+@pytest.mark.database()
 def test_database_setup():
     db_setup_res = check_output(["ueats", "database", "setup"], text=True)
     status, result, error = proccess_json_output(db_setup_res)
@@ -29,6 +31,7 @@ def test_database_setup():
         assert table in expected_tables
 
 
+@pytest.mark.database()
 def test_database_teardown():
     run_and_check("ueats database teardown")
     ueats_file = Path.cwd() / "ueats.db"
