@@ -7,6 +7,7 @@ Utilities to help during testing
 import subprocess
 import shlex
 import json
+import logging
 
 
 def proccess_json_output(text: str):
@@ -18,6 +19,7 @@ def proccess_json_output(text: str):
 
 
 def run_and_check(command: str, expected_status: int = 0, expected_error: str = ""):
+    logging.debug(f"Running command - \"{command}\"")
     command_list = shlex.split(command)
     result = subprocess.check_output(
         command_list,
