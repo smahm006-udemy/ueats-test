@@ -10,6 +10,9 @@ import json
 import logging
 
 
+logger = logging.getLogger("ueats_logger")
+
+
 def proccess_json_output(text: str):
     text_dict = json.loads(text)
     status = text_dict["status"]
@@ -19,7 +22,7 @@ def proccess_json_output(text: str):
 
 
 def run_and_check(command: str, expected_status: int = 0, expected_error: str = ""):
-    logging.debug(f"Running command - \"{command}\"")
+    logger.debug(f'Running command - "{command}"')
     command_list = shlex.split(command)
     result = subprocess.check_output(
         command_list,
@@ -27,5 +30,7 @@ def run_and_check(command: str, expected_status: int = 0, expected_error: str = 
         text=True,
     )
     status, result, error = proccess_json_output(result.strip())
-    assert status == expected_status and error == expected_error, f"Got error running command {command}\nStatus:{status}\nError: {error}"
+    assert (
+        status == expected_status and error == expected_error
+    ), f"Got error running command {command}\nStatus:{status}\nError: {error}"
     return result
