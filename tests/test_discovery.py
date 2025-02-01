@@ -5,10 +5,14 @@ tests/test_discovery.py
 Pytest discovery example
 """
 
+import pytest
 
+
+@pytest.mark.discovery
 class TestDiscovery:
-    def test_one(self):
+    @pytest.mark.basic
+    def test_discover_one(self):
         pass
 
-    def test_two(self):
+    def test_discover_two(self):
         pass

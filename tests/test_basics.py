@@ -5,12 +5,17 @@ tests/test_basics.py
 Basic pytest structure
 """
 
+import pytest
 
+
+@pytest.mark.discovery
+@pytest.mark.basic
 def test_basic():
     """Test a basic test"""
     print("Hello World")
 
 
+@pytest.mark.basic()
 def test_one_plus_one():
     """Test to verify one plus one is two"""
     if 1 + 1 != 2:
