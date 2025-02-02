@@ -12,6 +12,16 @@ import logging
 
 logger = logging.getLogger("ueats_logger")
 
+class UeatsCommandError(Exception):
+    """Exception raised if running a ueats command returns an error"""
+
+    def __init__(self, status, message):
+        self.message = message
+        self.status= status
+
+    def __str__(self):
+        return f"Status {self.status}, Error: {self.message}"
+
 
 def proccess_json_output(text: str):
     text_dict = json.loads(text)
@@ -30,7 +40,6 @@ def run_and_check(command: str):
         text=True,
     )
     status, result, error = proccess_json_output(output.strip())
-    assert (
-        status == 0 and error == ""
-    ), f"Got error running command {command}\nStatus:{status}\nError: {error}"
+    if status != 0 or error != "":
+        raise UeatsCommandError(status, error)
     return result

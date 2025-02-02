@@ -1,6 +1,6 @@
 import pytest
 from pathlib import Path
-from .utils import logger, run_and_check
+from .utils import logger, run_and_check, UeatsCommandError
 
 
 @pytest.mark.user
@@ -31,7 +31,7 @@ class TestUsers:
             run_and_check("ueats database setup")
             run_and_check(f"ueats user add {self.user_name} {self.user_address}")
             with pytest.raises(
-                AssertionError, match=f"User '{self.user_name}' already exists"
+                UeatsCommandError, match=f"User '{self.user_name}' already exists"
             ):
                 run_and_check(f"ueats user add {self.user_name} {self.user_address}")
         finally:
