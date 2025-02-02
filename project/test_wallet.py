@@ -1,6 +1,6 @@
 import pytest
 from pathlib import Path
-from .utils import logger, run_and_check
+from .utils import UeatsCommandError, logger, run_and_check
 
 
 @pytest.mark.wallet
@@ -41,7 +41,7 @@ class TestWallet:
             run_and_check("ueats database setup")
             run_and_check(f"ueats user add {self.user_name} {self.user_address}")
             run_and_check(f"ueats wallet deposit {self.user_name} {self.user_amount}")
-            with pytest.raises(AssertionError, match="Insufficient balance"):
+            with pytest.raises(UeatsCommandError, match="Insufficient balance"):
                 run_and_check(f"ueats wallet withdraw {self.user_name} {double_amount}")
         finally:
             self.ueats_file.unlink()
