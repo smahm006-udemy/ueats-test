@@ -26,19 +26,24 @@ def test_database_setup():
     assert ueats_file.exists(), ""
     db_list_res = check_output(["ueats", "database", "list"], text=True)
     status, result, error = proccess_json_output(db_list_res)
-    assert status == 0 and not error, f"Got error listing database\nStatus:{status}\nError: {error}"
+    assert (
+        status == 0 and not error
+    ), f"Got error listing database\nStatus:{status}\nError: {error}"
     recieved_tables = list(result.keys())
     expected_tables = ["users", "restaurants", "menus", "orders", "deliveries"]
     for table in recieved_tables:
         assert table in expected_tables
+    ueats_file.unlink()
 
 
 @pytest.mark.happy()
 @pytest.mark.database()
 def test_database_teardown():
+    run_and_check("ueats database setup")
     run_and_check("ueats database teardown")
     ueats_file = Path.cwd() / "ueats.db"
     logger.info(f"Checking existence of database path at '{ueats_file}' ")
     assert ueats_file.exists()
-    output = run_and_check("ueats database list")
-    assert all(not x for x in output.values())
+    result = run_and_check("ueats database list")
+    assert all(not x for x in result.values())
+    ueats_file.unlink()
