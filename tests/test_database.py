@@ -27,6 +27,7 @@ def test_database_setup():
     expected_tables = ["users", "restaurants", "menus", "orders", "deliveries"]
     for table in recieved_tables:
         assert table in expected_tables
+    ueats_file.unlink()
 
 
 def test_database_teardown():
@@ -35,3 +36,4 @@ def test_database_teardown():
     assert ueats_file.exists()
     output = run_and_check("ueats database list")
     assert all(not x for x in output.values())
+    ueats_file.unlink()
