@@ -15,6 +15,8 @@ class TestWallet:
         try:
             run_and_check("ueats database setup")
             run_and_check(f"ueats user add {self.user_name} {self.user_address}")
+            result = run_and_check("ueats database list -t users")
+            assert result["users"][0]["wallet"] == 0
             run_and_check(f"ueats wallet deposit {self.user_name} {self.user_amount}")
             result = run_and_check("ueats database list -t users")
             assert result["users"][0]["wallet"] == self.user_amount
