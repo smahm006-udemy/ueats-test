@@ -1,65 +1,8 @@
 import pytest
-import urllib.request
-import json
 import logging
 
 
 logger = logging.getLogger("fixture_logger")
-
-@pytest.fixture
-def hello_world():
-    return "Hello, World!"
-
-
-@pytest.fixture
-def bitcoin_rate():
-    url = "https://api.coindesk.com/v1/bpi/currentprice.json"
-    try:
-        with urllib.request.urlopen(url) as response:
-            if response.status != 200:
-                pytest.fail("Failed to fetch Bitcoin rate")
-            data = json.loads(response.read().decode())
-            rate = data["bpi"]["USD"]["rate_float"]
-            logger.debug(f"Current Bitcoin rate: ${rate}")
-            # Check if the rate is greater than $60,000
-            if rate < 60000:
-                pytest.skip(f"Bitcoin rate is below $60,000: ${rate}")
-            return rate
-    except Exception as e:
-        pytest.fail(f"Error fetching Bitcoin rate: {e}")
-
-
-@pytest.fixture
-def open_file():
-    file_name = "hello_world.txt"
-    logger.info(f"Opening file {file_name}")
-    file = open(file_name, "w+")
-    yield file
-    logger.info(f"Closing file {file_name}")
-    file.close()
-
-
-# @pytest.fixture
-# def open_file(request):
-#     file_name = "hello_world.txt"
-#     logger.info(f"Opening file {file_name}")
-#     file = open(file_name, "w+")
-
-#     def close_file():
-#         logger.info(f"Closing file {file_name}")
-#         file.close()
-
-#     request.addfinalizer(close_file)
-#     return file
-
-@pytest.fixture(scope="session")
-def scoped_fixture():
-    x = [0]
-    logger.info("Setting up fixture with a function scope")
-    yield x
-    logger.info("Tearing down fixture with a function scope")
-
-
 
 @pytest.mark.fixture
 class TestFixtures:
@@ -79,16 +22,3 @@ class TestFixtures:
         assert written_content == hello_world, (
             f"Expected '{hello_world}', but got '{written_content}'"
         )
-
-    def test_fixture_scope_one(self, scoped_fixture):
-        scoped_fixture[0] += 1
-        logger.debug(f"VALUE = {scoped_fixture}")
-
-    def test_fixture_scope_two(self, scoped_fixture):
-        scoped_fixture[0] += 1
-        logger.debug(f"VALUE = {scoped_fixture}")
-
-@pytest.mark.fixture
-def test_fixture_scope_three(scoped_fixture):
-        scoped_fixture[0] += 1
-        logger.debug(f"VALUE = {scoped_fixture}")
