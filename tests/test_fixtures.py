@@ -4,6 +4,8 @@ import json
 import logging
 
 
+logger = logging.getLogger("fixture_logger")
+
 @pytest.fixture
 def hello_world():
     return "Hello, World!"
@@ -18,7 +20,7 @@ def bitcoin_rate():
                 pytest.fail("Failed to fetch Bitcoin rate")
             data = json.loads(response.read().decode())
             rate = data["bpi"]["USD"]["rate_float"]
-            logging.debug(f"Current Bitcoin rate: ${rate}")
+            logger.debug(f"Current Bitcoin rate: ${rate}")
             # Check if the rate is greater than $60,000
             if rate < 60000:
                 pytest.skip(f"Bitcoin rate is below $60,000: ${rate}")
@@ -30,25 +32,33 @@ def bitcoin_rate():
 @pytest.fixture
 def open_file():
     file_name = "hello_world.txt"
-    logging.info(f"Opening file {file_name}")
+    logger.info(f"Opening file {file_name}")
     file = open(file_name, "w+")
     yield file
-    logging.info(f"Closing file {file_name}")
+    logger.info(f"Closing file {file_name}")
     file.close()
 
 
 # @pytest.fixture
 # def open_file(request):
 #     file_name = "hello_world.txt"
-#     logging.info(f"Opening file {file_name}")
+#     logger.info(f"Opening file {file_name}")
 #     file = open(file_name, "w+")
 
 #     def close_file():
-#         logging.info(f"Closing file {file_name}")
+#         logger.info(f"Closing file {file_name}")
 #         file.close()
 
 #     request.addfinalizer(close_file)
 #     return file
+
+@pytest.fixture(scope="session")
+def scoped_fixture():
+    x = [0]
+    logger.info("Setting up fixture with a function scope")
+    yield x
+    logger.info("Tearing down fixture with a function scope")
+
 
 
 @pytest.mark.fixture
@@ -60,12 +70,25 @@ class TestFixtures:
         assert bitcoin_rate > 60000
 
     def test_write_to_file(self, hello_world, open_file):
-        logging.info(f"Writing '{hello_world}' to file")
+        logger.info(f"Writing '{hello_world}' to file")
         open_file.write(hello_world)
         open_file.flush()
         open_file.seek(0)
         written_content = open_file.read()
-        logging.debug(f"File read contents: '{written_content}'")
+        logger.debug(f"File read contents: '{written_content}'")
         assert written_content == hello_world, (
             f"Expected '{hello_world}', but got '{written_content}'"
         )
+
+    def test_fixture_scope_one(self, scoped_fixture):
+        scoped_fixture[0] += 1
+        logger.debug(f"VALUE = {scoped_fixture}")
+
+    def test_fixture_scope_two(self, scoped_fixture):
+        scoped_fixture[0] += 1
+        logger.debug(f"VALUE = {scoped_fixture}")
+
+@pytest.mark.fixture
+def test_fixture_scope_three(scoped_fixture):
+        scoped_fixture[0] += 1
+        logger.debug(f"VALUE = {scoped_fixture}")
