@@ -42,3 +42,10 @@ def open_file():
 @pytest.fixture
 def my_location():
     return "Fixture from parent conftest.py inside tests folder"
+
+@pytest.fixture(scope="session")
+def scoped_fixture():
+    x = [0]
+    logger.info("Setting up fixture with a function scope")
+    yield x
+    logger.info("Tearing down fixture with a function scope")
