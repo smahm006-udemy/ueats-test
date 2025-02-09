@@ -16,8 +16,8 @@ class TestUsers:
             run_and_check(f"ueats user add {self.user_name} {self.user_address}")
             result = run_and_check("ueats database list -t users")
             for user in result["users"]:
-                if user["name"] == self.user_name:
-                    assert user["address"] == self.user_address
+                if user["user_name"] == self.user_name:
+                    assert user["user_address"] == self.user_address
                     break
             else:
                 logger.error(f'Users list :- {result["users"]}')
@@ -44,6 +44,6 @@ class TestUsers:
             run_and_check(f"ueats user add {self.user_name} {self.user_address}")
             run_and_check(f"ueats user remove {self.user_name}")
             result = run_and_check("ueats database list -t users")
-            assert all("Alice" not in x["name"] for x in result["users"])
+            assert all(self.user_name not in x["user_name"] for x in result["users"])
         finally:
             self.ueats_file.unlink()
