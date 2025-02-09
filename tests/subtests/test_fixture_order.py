@@ -12,3 +12,8 @@ class TestFixtureOrder:
 
     def test_fixture_order(self, my_location, subtests_specific):
         logging.info(my_location)
+
+@pytest.mark.fixture
+def test_fixture_scope_session(scoped_fixture):
+    scoped_fixture[0] += 1
+    logging.debug(f"VALUE = {scoped_fixture}")

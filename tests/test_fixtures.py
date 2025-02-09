@@ -22,3 +22,15 @@ class TestFixtures:
         assert written_content == hello_world, (
             f"Expected '{hello_world}', but got '{written_content}'"
         )
+
+    def test_fixture_scope_function(self, scoped_fixture):
+        scoped_fixture[0] += 1
+        logger.debug(f"NEW VALUE = {scoped_fixture}")
+    def test_fixture_scope_class(self, scoped_fixture):
+        scoped_fixture[0] += 1
+        logger.debug(f"NEW VALUE = {scoped_fixture}")
+
+@pytest.mark.fixture
+def test_fixture_scope_module(scoped_fixture):
+    scoped_fixture[0] += 1
+    logger.debug(f"VALUE = {scoped_fixture}")
