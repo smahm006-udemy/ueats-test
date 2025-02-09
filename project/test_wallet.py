@@ -16,10 +16,10 @@ class TestWallet:
             run_and_check("ueats database setup")
             run_and_check(f"ueats user add {self.user_name} {self.user_address}")
             result = run_and_check("ueats database list -t users")
-            assert result["users"][0]["wallet"] == 0
+            assert result["users"][0]["user_wallet"] == 0
             run_and_check(f"ueats wallet deposit {self.user_name} {self.user_amount}")
             result = run_and_check("ueats database list -t users")
-            assert result["users"][0]["wallet"] == self.user_amount
+            assert result["users"][0]["user_wallet"] == self.user_amount
         finally:
             self.ueats_file.unlink()
 
@@ -32,7 +32,7 @@ class TestWallet:
             run_and_check(f"ueats wallet deposit {self.user_name} {self.user_amount}")
             run_and_check(f"ueats wallet withdraw {self.user_name} {half_amount}")
             result = run_and_check("ueats database list -t users")
-            assert result["users"][0]["wallet"] == half_amount
+            assert result["users"][0]["user_wallet"] == half_amount
         finally:
             self.ueats_file.unlink()
 
