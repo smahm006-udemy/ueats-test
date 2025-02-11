@@ -1,11 +1,28 @@
 import pytest
 import logging
+from .fixtures import scoped_fixture
 
 
 logger = logging.getLogger("fixture_logger")
 
+
+@pytest.mark.fixture
+def test_fixture_scope_module(scoped_fixture):
+    scoped_fixture[0] += 1
+    logger.debug(f"VALUE = {scoped_fixture}")
+
+
+@pytest.fixture
+def my_location():
+    return "Fixture from module test_fixtures.py"
+
+
 @pytest.mark.fixture
 class TestFixtures:
+    @pytest.fixture
+    def my_location(self):
+        return "Fixture from class TestFixtures inside test_fixtures.py"
+
     def test_basic_fixture(self, hello_world):
         assert hello_world == "Hello, World!"
 
@@ -23,14 +40,13 @@ class TestFixtures:
             f"Expected '{hello_world}', but got '{written_content}'"
         )
 
+    def test_fixture_order(self, imported):
+        logging.info(imported)
+
     def test_fixture_scope_function(self, scoped_fixture):
         scoped_fixture[0] += 1
         logger.debug(f"NEW VALUE = {scoped_fixture}")
+
     def test_fixture_scope_class(self, scoped_fixture):
         scoped_fixture[0] += 1
         logger.debug(f"NEW VALUE = {scoped_fixture}")
-
-@pytest.mark.fixture
-def test_fixture_scope_module(scoped_fixture):
-    scoped_fixture[0] += 1
-    logger.debug(f"VALUE = {scoped_fixture}")
