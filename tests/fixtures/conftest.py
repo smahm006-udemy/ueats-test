@@ -1,8 +1,10 @@
 import pytest
 import urllib.request
 import json
+import tempfile
+import os
 from .test_fixtures import logger
-from .fixtures import imported
+
 
 @pytest.fixture
 def hello_world():
@@ -53,3 +55,14 @@ def open_file():
 @pytest.fixture
 def whereami():
     return "Fixture from local conftest.py inside tests/fixtures folder"
+
+
+@pytest.fixture()
+def cleandir():
+    with tempfile.TemporaryDirectory() as new_directory:
+        old_directory = os.getcwd()
+        logger.info(f"Changing directory to {new_directory}")
+        os.chdir(new_directory)
+        yield "a"
+        logger.info(f"Changing directory back to {old_directory}")
+        os.chdir(old_directory)
