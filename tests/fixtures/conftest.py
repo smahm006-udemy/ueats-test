@@ -30,6 +30,16 @@ def bitcoin_rate():
 
 
 @pytest.fixture
+def circle():
+    return {"radius": 5}
+
+
+@pytest.fixture
+def circle_area(circle):
+    return 3.14 * (circle["radius"] ** 2)
+
+
+@pytest.fixture
 def open_file():
     """Creates and yields a file and closes it during teardown"""
     file_name = "hello_world.txt"
