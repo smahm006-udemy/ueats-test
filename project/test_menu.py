@@ -23,7 +23,7 @@ class TestMenu:
         run_and_check(f"ueats restaurant remove {self.restaurant_name}")
 
     @pytest.mark.happy
-    def test_menu_add(self, database, restaurant):
+    def test_menu_add(self, create_database, restaurant):
         run_and_check(
             f"ueats menu add {self.restaurant_name} {self.item_name} {self.item_price} {self.item_count} {self.item_preptime}"
         )
@@ -50,7 +50,7 @@ class TestMenu:
             )
 
     @pytest.mark.happy
-    def test_menu_invalid_preptime(self, database, restaurant):
+    def test_menu_invalid_preptime(self, create_database, restaurant):
         self.item_preptime = 11
         with pytest.raises(UeatsCommandError):
             run_and_check(
@@ -58,7 +58,7 @@ class TestMenu:
             )
 
     @pytest.mark.happy
-    def test_menu_update(self, database, restaurant):
+    def test_menu_update(self, create_database, restaurant):
         run_and_check(
             f"ueats menu add {self.restaurant_name} {self.item_name} {self.item_price} {self.item_count} {self.item_preptime}"
         )
@@ -90,7 +90,7 @@ class TestMenu:
 
 
     @pytest.mark.happy
-    def test_menu_remove(self, database, restaurant):
+    def test_menu_remove(self, create_database, restaurant):
         run_and_check(
             f"ueats menu add {self.restaurant_name} {self.item_name} {self.item_price} {self.item_count} {self.item_preptime}"
         )
