@@ -29,6 +29,9 @@ class TestFixtures:
     def test_bitcoin_rate(self, bitcoin_rate):
         assert bitcoin_rate > 60000
 
+    def test_circle_area(self, circle_area):
+        assert int(circle_area) == 78
+
     def test_write_to_file(self, hello_world, open_file):
         logger.info(f"Writing '{hello_world}' to file")
         open_file.write(hello_world)
