@@ -9,7 +9,7 @@ class TestRestaurants:
     restaurant_address = "Dallas"
 
     @pytest.mark.happy
-    def test_restaurant_add(self, database):
+    def test_restaurant_add(self, create_database):
         run_and_check(
             f"ueats restaurant add {self.restaurant_name} {self.restaurant_address}"
         )
@@ -23,7 +23,7 @@ class TestRestaurants:
             raise ValueError(f"{self.restaurant_name} not found in any restaurants")
 
     @pytest.mark.rainy
-    def test_restaurant_add_duplicate(self, database):
+    def test_restaurant_add_duplicate(self, create_database):
         run_and_check(
             f"ueats restaurant add {self.restaurant_name} {self.restaurant_address}"
         )
@@ -36,7 +36,7 @@ class TestRestaurants:
             )
 
     @pytest.mark.happy
-    def test_restaurant_remove(self, database):
+    def test_restaurant_remove(self, create_database):
         run_and_check(f"ueats restaurant add {self.restaurant_name} {self.restaurant_address}")
         run_and_check(f"ueats restaurant remove {self.restaurant_name}")
         result = run_and_check("ueats database list -t restaurants")
@@ -44,7 +44,7 @@ class TestRestaurants:
 
 
     @pytest.mark.rainy
-    def test_restaurant_remove_noexist(self, database):
+    def test_restaurant_remove_noexist(self, create_database):
         with pytest.raises(
             UeatsCommandError,
             match=f"Restaurant '{self.restaurant_name}' does not exist",
