@@ -1,6 +1,5 @@
 import pytest
-from pathlib import Path
-from .utils import logger, proccess_json_output, run_and_check, UeatsCommandError
+from .utils import logger, run_and_check, UeatsCommandError
 
 
 @pytest.mark.restaurant
