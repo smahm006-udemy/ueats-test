@@ -1,2 +1,2 @@
 pytest
-ueats @ git+https://github.com/xxxx/xxxx.git@main
+# ueats @ git+https://github.com/xxxx/xxxx.git@main
