@@ -1,2 +1,3 @@
 pytest
 pytest-mock
+# ueats @ git+https://github.com/xxxx/xxxx.git@main
