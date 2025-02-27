@@ -40,7 +40,6 @@ class TestOrders:
                 f"ueats order place {self.user['name']} {self.restaurant['name']} {item['name']}"
             )
             result = run_and_check(f"ueats database list -t users menus orders")
-            logger.debug(f"Result: {result}")
             assert result["orders"][0]["order_status"] == "placed"
             assert (
                 result["users"][0]["user_wallet"]
