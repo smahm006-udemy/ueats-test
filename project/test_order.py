@@ -1,6 +1,5 @@
 import pytest
-import re
-from .utils import logger, run_and_check, UeatsCommandError
+from .utils import run_and_check, UeatsCommandError
 
 
 @pytest.mark.order
@@ -39,25 +38,9 @@ class TestOrders:
             run_and_check(
                 f"ueats order place {self.user['name']} {self.restaurant['name']} {item['name']}"
             )
-            result = run_and_check(f"ueats database list -t users menus orders")
+            result = run_and_check("ueats database list -t users menus orders")
             assert result["orders"][0]["order_status"] == "placed"
             assert (
                 result["users"][0]["user_wallet"]
                 == balance - result["menus"][0]["item_price"]
             )
-
-    @pytest.mark.happy
-    def test_order_cancel(self, setup_tables):
-        item = self.restaurant['menu'][0]
-        self.user["wallet"] = 100
-        setup_tables(user=self.user, restaurant=self.restaurant)
-        result = run_and_check(
-            f"ueats order place {self.user['name']} {self.restaurant['name']} {item['name']}"
-        )
-        order_id = re.findall(r"Order ID: (\d+)", result)
-        if not order_id:
-            raise ValueError(f"Order ID not found in command output.\nOutput {result}")
-        run_and_check(f"ueats order cancel {order_id[0]}")
-        result = run_and_check(f"ueats database list -t users orders")
-        order_data = result["orders"][0]
-        assert order_data["order_status"] == "cancelled"

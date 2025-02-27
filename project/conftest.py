@@ -1,4 +1,5 @@
 import pytest
+import re
 from pathlib import Path
 from typing import Optional, Dict
 from .utils import logger, run_and_check, UeatsCommandError
@@ -38,3 +39,15 @@ def setup_tables():
                         f"ueats menu add {restaurant['name']} {item['name']} {item['price']} {item['count']} {item['preparation_time']}"
                     )
     return setup_tables_inner
+
+@pytest.fixture
+def place_order():
+    def place_order_inner(user_name: str, restaurant_name: str, item_name: str):
+        result = run_and_check(
+            f"ueats order place {user_name} {restaurant_name} {item_name}"
+        )
+        order_id = re.findall(r"Order ID: (\d+)", result)
+        if not order_id:
+            raise ValueError(f"Order ID not found in command output.\nOutput {result}")
+        return order_id[0]
+    return place_order_inner
