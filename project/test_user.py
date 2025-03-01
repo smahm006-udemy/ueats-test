@@ -18,6 +18,7 @@ class TestUsers:
             for user in result["users"]:
                 if user["user_name"] == self.user_name:
                     assert user["user_address"] == self.user_address
+                    assert user["user_wallet"] == 0
                     break
             else:
                 logger.error(f'Users list :- {result["users"]}')
