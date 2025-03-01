@@ -44,3 +44,4 @@ class TestOrders:
                 result["users"][0]["user_wallet"]
                 == balance - result["menus"][0]["item_price"]
             )
+            assert self.user["wallet"] == 100
