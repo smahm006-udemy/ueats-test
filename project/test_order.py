@@ -61,3 +61,4 @@ class TestOrders:
         result = run_and_check(f"ueats database list -t users orders")
         order_data = result["orders"][0]
         assert order_data["order_status"] == "cancelled"
+        assert self.user["wallet"] == 100
