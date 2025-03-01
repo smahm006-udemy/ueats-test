@@ -16,6 +16,7 @@ class TestRestaurants:
         for restaurant in result["restaurants"]:
             if restaurant["restaurant_name"] == self.restaurant_name:
                 assert restaurant["restaurant_address"] == self.restaurant_address
+                assert restaurant["restaurant_wallet"] == 0
                 break
         else:
             logger.error(f"Restaurants list :- {result['restaurants']}")
