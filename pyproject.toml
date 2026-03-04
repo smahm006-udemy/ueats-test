@@ -5,5 +5,10 @@ description = "Ueats Automation Test Suite"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "pytest>=8.3.4",
+    "pytest>=8",
+    "pytest-mock",
+    "ueats@git+https://github.com/smahm006-udemy/ueats@main",
 ]
+
+[tool.poetry]
+package-mode = false
