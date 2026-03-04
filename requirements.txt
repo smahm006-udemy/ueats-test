@@ -1,2 +1,3 @@
 pytest
 pytest-mock
+ueats @ git+https://github.com/smahm006-udemy/ueats@main
